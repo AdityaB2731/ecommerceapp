@@ -9,5 +9,7 @@ Paste your configuration into the .env file:
 
 NODE_ENV=production
 PORT=5000
-MONGO_URI=
+MONGO_URI=mongodb+srv://USERNAME:PASSWORD@cluster0.90ywxcn.mongodb.net
+//or
+MONGO_URI=mongodb+srv://USERNAME:PASSWORD@cluster0.90ywxcn.mongodb.net/blogdb?retryWrites=true&w=majority
 

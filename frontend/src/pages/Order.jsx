@@ -79,3 +79,94 @@
 // Bash
 // # Save the current PM2 process list
 // pm2 save
+
+
+// location /api/ {
+//     proxy_pass http://127.0.0.1:5000/;
+//     proxy_http_version 1.1;
+//     proxy_set_header Upgrade $http_upgrade;
+//     proxy_set_header Connection 'upgrade';
+//     proxy_set_header Host $host;
+//     proxy_cache_bypass $http_upgrade;
+// }
+
+// 🚀 FULL NGINX SETUP (MERN + /api routing)
+
+// We assume:
+
+// Backend running on PM2 → port 5000
+// Frontend built using Vite → dist/
+// API prefix = /api
+// ✅ STEP 1: Install / verify NGINX
+// sudo apt update
+// sudo apt install nginx -y
+
+// Check:
+
+// sudo systemctl status nginx
+// ✅ STEP 2: Build frontend (you already did but for reference)
+// cd frontend
+// npm install
+// npm run build
+
+// This creates:
+
+// frontend/dist
+// ✅ STEP 3: Copy frontend to NGINX folder
+// sudo rm -rf /var/www/html/*
+// sudo cp -r dist/ /var/www/html/
+
+
+
+// ✅ STEP 4: Open NGINX config
+// sudo nano /etc/nginx/sites-available/default
+// ✅ STEP 5: REPLACE ENTIRE SERVER BLOCK with this
+
+// 👉 This is your COMPLETE correct setup:
+
+// server {
+//     listen 80;
+//     server_name _;
+
+//     root /var/www/html/dist;
+
+//     # FRONTEND (React/Vite SPA routing fix)
+//     location / {
+//         try_files $uri $uri/ index.html;
+//     }
+
+//     # BACKEND API ROUTING
+//     location /api/ {
+//         proxy_pass http://127.0.0.1:5000/;
+//         proxy_http_version 1.1;
+
+//         proxy_set_header Upgrade $http_upgrade;
+//         proxy_set_header Connection 'upgrade';
+//         proxy_set_header Host $host;
+//         proxy_cache_bypass $http_upgrade;
+//     }
+// }
+// 🧠 IMPORTANT NOTES
+// 1. try_files ... /index.html
+
+// This fixes:
+
+// React routing (SPA refresh issue)
+// prevents 404 on page reload
+// 2. /api/ proxy_pass MUST have trailing slash
+// proxy_pass http://127.0.0.1:5000/;
+
+// ✔ This removes /api prefix correctly
+
+// ✅ STEP 6: Test NGINX config
+// sudo nginx -t
+
+// You should see:
+
+// syntax is ok
+// test is successful
+// ✅ STEP 7: Restart NGINX
+// sudo systemctl restart nginx
+
+// note in root no need /dist if in case something fails
+// and in =404 replace with /index.html if index.html does not work
