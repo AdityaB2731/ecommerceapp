@@ -1,5 +1,9 @@
 
-curl -fsSL [https://deb.nodesource.com/setup_22.x](https://deb.nodesource.com/setup_22.x) | sudo -E bash -
+Option 1 (recommended — run one by one)
+curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+
+## then this
+
 sudo apt install -y nodejs
 
 
